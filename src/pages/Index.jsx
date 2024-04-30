@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text, VStack } from '@chakra-ui/react';
 
 const Index = () => {
   const [dbUrl, setDbUrl] = useState('');
@@ -13,8 +13,10 @@ const Index = () => {
   };
 
   return (
-    <VStack spacing={4} align="stretch">
-      <Box p={5} shadow="md" borderWidth="1px">
+    <Flex direction="column" w="100%" p={4} bg="blue.800" color="white">
+      <Heading mb={4}>GPT Engineer</Heading>
+      <VStack spacing={4} align="stretch" p={5}>
+      <Box p={8} shadow="md" borderWidth="1px">
         <FormControl isRequired>
           <FormLabel htmlFor="db-url">Database URL</FormLabel>
           <Input id="db-url" placeholder="Enter Neo4j Database URL" onChange={(e) => setDbUrl(e.target.value)} />
@@ -27,14 +29,15 @@ const Index = () => {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Input id="password" type="password" placeholder="Enter Password" onChange={(e) => setPassword(e.target.value)} />
         </FormControl>
-        <Button mt={4} colorScheme="blue" onClick={handleConnect}>Connect</Button>
+        <Button mt={4} colorScheme="teal" onClick={handleConnect}>Connect</Button>
       </Box>
       {connectionResult && (
-        <Box p={5} mt={4} shadow="md" borderWidth="1px">
+        <Box p={8} mt={4} shadow="md" borderWidth="1px">
           <Text>{connectionResult}</Text>
         </Box>
       )}
     </VStack>
+    </Flex>
   );
 };
 
