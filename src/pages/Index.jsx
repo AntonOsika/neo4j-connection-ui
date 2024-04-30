@@ -1,3 +1,4 @@
+import neo4j from 'neo4j-driver';
 import { useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 
@@ -8,8 +9,19 @@ const Index = () => {
   const [connectionResult, setConnectionResult] = useState('');
 
   const handleConnect = async () => {
-    // Placeholder for database connection logic
-    setConnectionResult('Connected successfully. Found 10 nodes and 5 edges.');
+    try {
+      const driver = neo4j.driver(dbUrl, neo4j.auth.basic(username, password));
+      const session = driver.session();
+      const result = await session.run('MATCH (n) RETURN n LIMIT 10');
+      const nodes = result.records.map(record => record.get('n'));
+      const edgesCount = await session.run('MATCH ()-[r]->() RETURN count(r) as count');
+      const edges = edgesCount.records[0].get('count').toInt();
+      setConnectionResult(`Connected successfully. Found ${nodes.length} nodes and ${edges} edges.`);
+      session.close();
+      driver.close();
+    } catch (error) {
+      setConnectionResult(`Failed to connect: ${error.message}`);
+    }
   };
 
   return (
